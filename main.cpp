@@ -4,6 +4,13 @@
 
 using namespace std;
 
+void wypisz(short data[], short n)
+{
+    for(int i=0; i<n; i++)
+    {
+        cout<<data[i]<<", ";
+    }
+}
 
 bool if_sorted(short data[], short n)
 {
@@ -82,11 +89,7 @@ int main()
         cout<<"blad sortowania"<<endl<<endl;
     }
 
-    for(int i=0; i<n; i++)
-    {
-        cout<<data[i]<<", ";
-    }
-
+    wypisz(data, n);
 
     return 0;
 }
