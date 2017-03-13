@@ -20,6 +20,9 @@ bool if_sorted(short data[], short n)
             return 0;
     }
     return 1;
+    asfsaf
+        
+        sfafas
 }
 
 
