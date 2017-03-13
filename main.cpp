@@ -19,6 +19,11 @@ void insert_sort(short data[], int n)
     }
 }
 
+void selection_sort(short data[], int n)
+{
+
+}
+
 int main()
 {
     srand(time(NULL));
@@ -33,12 +38,12 @@ int main()
     cout<<endl;
 
     insert_sort(data, n);
-
+/*
     for(int i=0; i<n; i++)
     {
         cout<<data[i]<<", ";
     }
-
+*/
 
 
     return 0;
