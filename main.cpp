@@ -177,51 +177,46 @@ int main()
 
     n = A
 
-        for(short i=0; i<15; i++)
-    {
-        losuj(losowa, n);
-        clock_t begin = clock();
-        heap_sort(losowa, n);
-        clock_t end = clock();
-        heap_time = double(end - begin) / CLOCKS_PER_SEC;
-        n += A;
-    }
-
-    n = A
-
-        for(short i=0; i<15; i++)
+    wyj<<"1) selection-sort: "<<endl;
+    for(short i=0; i<15; i++)
     {
         losuj(losowa, n);
         clock_t begin = clock();
         selection_sort(losowa, n);
         clock_t end = clock();
         selection_time = double(end - begin) / CLOCKS_PER_SEC;
+        wyj<<"pomiar dla "<<n<<" elementow: "<<insert_time<<"s"<<endl;
         n += A;
     }
 
     n = A
 
-        for(short i=0; i<15; i++)
-    {
-        losuj(losowa, n);
-        clock_t begin = clock();
-        quick_sort(losowa, n);
-        clock_t end = clock();
-        quick_time = double(end - begin) / CLOCKS_PER_SEC;
-        n += A;
-    }
-
-    n = A
-
-        for(short i=0; i<15; i++)
+    wyj<<"1) merge-sort: "<<endl;
+    for(short i=0; i<15; i++)
     {
         losuj(losowa, n);
         clock_t begin = clock();
         merge_sort(losowa, n);
         clock_t end = clock();
         merge_time = double(end - begin) / CLOCKS_PER_SEC;
+        wyj<<"pomiar dla "<<n<<" elementow: "<<insert_time<<"s"<<endl;
         n += A;
     }
+
+    n = A
+
+    wyj<<"1) insert-sort: "<<endl;
+    for(short i=0; i<15; i++)
+    {
+        losuj(losowa, n);
+        clock_t begin = clock();
+        insert_sort(losowa, n);
+        clock_t end = clock();
+        insert_time = double(end - begin) / CLOCKS_PER_SEC;
+        wyj<<"pomiar dla "<<n<<" elementow: "<<insert_time<<"s"<<endl;
+        n += A;
+    }
+
 
         // ROSNACE
 
