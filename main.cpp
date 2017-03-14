@@ -1,11 +1,11 @@
 #include <cstdlib>
-#include <fstream>
+#include <fstream>  // OBSLUGA STRUMIENIA WEJ/WYJ PLIKOW
 #include <ctime>
-//#include "stdafx.h"
 #include <limits.h>
 #include <iostream>
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>
+//#include "stdafx.h"
 
 const short A = 10000; // poczatkowa liczba elem do losowania, pozniej zwiekszana w petli o krok = A (A + A itd.)
 const unsigned int MAX = 150000; // max liczba elemntow (w ostatnim kroku nr 15)
@@ -152,41 +152,35 @@ int main()
 {
     srand(time(NULL));
 
-    unsigned int losowa[MAX], temp[MAX];   // ZOSTAWILEM NAZWE "LOSOWA" BO NIE CHCIALO MI SIE WSZEDZIE ZMIENIAC, TRAKTUJ POPROSTU JAKO TABLICE GLOWNA :P
-
-	losuj(losowa, n);
-	losujRosnac(rosnaca, n);
-	losujMalejac(malejaca, n);
-	losujV(vksztalt, n);
-	losujStale(stala, n);
+    unsigned int losowa[MAX], temp[MAX];   // ZOSTAWILEM NAZWE "LOSOWA" BO NIE CHCIALO MI SIE WSZEDZIE ZMIENIAC, TO POPROSTU TABLICA GLOWNA :P
 
     double selection_time = 0, insert_time = 0, merge_time = 0, heap_time = 0, quick_time = 0;
 
     unsigned int n = A;   //   n - liczba elem do losowania
 
-    ofstream wyjscie;
-    wyjscie.open("wyniki.txt");
+    ofstream wyjscie;   // TWORZENIE STRUMIENIA WYJSCIA PLIKU
+    wyjscie.open("wyniki.txt");     // OTWIERANIE (TWORZENIE) PLIKU SDO WYPISANIA WYNIKOW
     wyj<<"Wyniki pomiarow czasu wykonywania algorytmow sortowania:"<<endl<<endl<<endl<<"Czas sortowania dla:"<<endl<<endl;
 
     //LOSOWO
 
     wyj<<"a) losowego zestawu danych:"<<endl<<endl;
 
-    losuj(losowa, MAX);
+    losuj(losowa, MAX); //LOSOWANIE TABLICY DANYCH
 
     wyj<<"1) insert-sort: "<<endl;
-    for(short i=0; i<15; i++)
+    for(short i=0; i<15; i++)   // 15 POMIAROW, OD 10K DO 150K ELEMENTOW
     {
-        resetuj_tablice(losowa, temp, n);
+        resetuj_tablice(losowa, temp, n);      //RESETOWANIE TABLICY TEMP, BY BYLA UNSORTED
         clock_t begin = clock();
-        insert_sort(temp, n);
+        insert_sort(temp, n);       //SORTOWANIE NA TABLICY TEMP
         clock_t end = clock();
         insert_time = double(end - begin) / CLOCKS_PER_SEC;
         wyj<<"pomiar dla "<<n<<" elementow: "<<insert_time<<"s"<<endl;
-        n += A;
+        n += A;         // ZWIEKSZANIE LICZBY ELEMENTOW DO POSORTOWANIA - KROK POMIAROWY CO A =10K
     }
 
-    n = A;
+    n = A;      // RESET DO WYJSCIOWEJ LICZBY 10K ELEMENTOW PRZED WYKONANIEM KOLEJNEJ PETLI I SORTOWAN
 
     wyj<<"2) selection-sort: "<<endl;
     for(short i=0; i<15; i++)
@@ -294,24 +288,16 @@ int main()
 
         // MALEJACE
 
-
-        // TU KONTUNUJ
-                // TU KONTUNUJ
-                        // TU KONTUNUJ
-                                // TU KONTUNUJ
-
-
-
-        //
-
     wyj<<endl<<"c) malejacego zestawu danych:"<<endl<<endl;
+
+    losujMalejac(losowa, n);
 
     wyj<<"1) insert-sort: "<<endl;
     for(short i=0; i<15; i++)
     {
-        losujMalejac(rosnaca, n);
+        resetuj_tablice(losowa, temp, n);
         clock_t begin = clock();
-        insert_sort(losowa, n);
+        insert_sort(temp, n);
         clock_t end = clock();
         insert_time = double(end - begin) / CLOCKS_PER_SEC;
         wyj<<"pomiar dla "<<n<<" elementow: "<<insert_time<<"s"<<endl;
@@ -323,9 +309,9 @@ int main()
     wyj<<"2) selection-sort: "<<endl;
     for(short i=0; i<15; i++)
     {
-        losujMalejac(losowa, n);
+        resetuj_tablice(losowa, temp, n);
         clock_t begin = clock();
-        selection_sort(losowa, n);
+        selection_sort(temp, n);
         clock_t end = clock();
         selection_time = double(end - begin) / CLOCKS_PER_SEC;
         wyj<<"pomiar dla "<<n<<" elementow: "<<selection_time<<"s"<<endl;
@@ -337,9 +323,9 @@ int main()
     wyj<<"3) merge-sort: "<<endl;
     for(short i=0; i<15; i++)
     {
-        losujMalejac(losowa, n);
+        resetuj_tablice(losowa, temp, n);
         clock_t begin = clock();
-        merge_sort(losowa, n);
+        merge_sort(temp, n);
         clock_t end = clock();
         merge_time = double(end - begin) / CLOCKS_PER_SEC;
         wyj<<"pomiar dla "<<n<<" elementow: "<<merge_time<<"s"<<endl;
@@ -351,9 +337,9 @@ int main()
     wyj<<"4) heap-sort: "<<endl;
     for(short i=0; i<15; i++)
     {
-        losujMalejac(losowa, n);
+        resetuj_tablice(losowa, temp, n);
         clock_t begin = clock();
-        heap_sort(losowa, n);
+        heap_sort(temp, n);
         clock_t end = clock();
         heap_time = double(end - begin) / CLOCKS_PER_SEC;
         wyj<<"pomiar dla "<<n<<" elementow: "<<heap_time<<"s"<<endl;
@@ -366,12 +352,14 @@ int main()
 
     wyj<<endl<<"d) v-ksztaltnego zestawu danych:"<<endl<<endl;
 
+    losujV(losowa, n);
+
     wyj<<"1) insert-sort: "<<endl;
     for(short i=0; i<15; i++)
     {
-        losujV(rosnaca, n);
+        resetuj_tablice(losowa, temp, n);
         clock_t begin = clock();
-        insert_sort(losowa, n);
+        insert_sort(temp, n);
         clock_t end = clock();
         insert_time = double(end - begin) / CLOCKS_PER_SEC;
         wyj<<"pomiar dla "<<n<<" elementow: "<<insert_time<<"s"<<endl;
@@ -383,9 +371,9 @@ int main()
     wyj<<"2) selection-sort: "<<endl;
     for(short i=0; i<15; i++)
     {
-        losujV(losowa, n);
+        resetuj_tablice(losowa, temp, n);
         clock_t begin = clock();
-        selection_sort(losowa, n);
+        selection_sort(temp, n);
         clock_t end = clock();
         selection_time = double(end - begin) / CLOCKS_PER_SEC;
         wyj<<"pomiar dla "<<n<<" elementow: "<<selection_time<<"s"<<endl;
@@ -397,9 +385,9 @@ int main()
     wyj<<"3) merge-sort: "<<endl;
     for(short i=0; i<15; i++)
     {
-        losujV(losowa, n);
+        resetuj_tablice(losowa, temp, n);
         clock_t begin = clock();
-        merge_sort(losowa, n);
+        merge_sort(temp, n);
         clock_t end = clock();
         merge_time = double(end - begin) / CLOCKS_PER_SEC;
         wyj<<"pomiar dla "<<n<<" elementow: "<<merge_time<<"s"<<endl;
@@ -411,9 +399,9 @@ int main()
     wyj<<"4) heap-sort: "<<endl;
     for(short i=0; i<15; i++)
     {
-        losujV(losowa, n);
+        resetuj_tablice(losowa, temp, n);
         clock_t begin = clock();
-        heap_sort(losowa, n);
+        heap_sort(temp, n);
         clock_t end = clock();
         heap_time = double(end - begin) / CLOCKS_PER_SEC;
         wyj<<"pomiar dla "<<n<<" elementow: "<<heap_time<<"s"<<endl;
@@ -421,19 +409,19 @@ int main()
     }
 
     n = A;
-
-
 
         // STALE
 
     wyj<<endl<<"e) stalego zestawu danych:"<<endl<<endl;
 
+    losujStale(losowa, n);
+
     wyj<<"1) insert-sort: "<<endl;
     for(short i=0; i<15; i++)
     {
-        losujStale(rosnaca, n);
+        resetuj_tablice(losowa, temp, n);
         clock_t begin = clock();
-        insert_sort(losowa, n);
+        insert_sort(temp, n);
         clock_t end = clock();
         insert_time = double(end - begin) / CLOCKS_PER_SEC;
         wyj<<"pomiar dla "<<n<<" elementow: "<<insert_time<<"s"<<endl;
@@ -445,9 +433,9 @@ int main()
     wyj<<"2) selection-sort: "<<endl;
     for(short i=0; i<15; i++)
     {
-        losujStale(losowa, n);
+        resetuj_tablice(losowa, temp, n);
         clock_t begin = clock();
-        selection_sort(losowa, n);
+        selection_sort(temp, n);
         clock_t end = clock();
         selection_time = double(end - begin) / CLOCKS_PER_SEC;
         wyj<<"pomiar dla "<<n<<" elementow: "<<selection_time<<"s"<<endl;
@@ -459,9 +447,9 @@ int main()
     wyj<<"3) merge-sort: "<<endl;
     for(short i=0; i<15; i++)
     {
-        losujStale(losowa, n);
+        resetuj_tablice(losowa, temp, n);
         clock_t begin = clock();
-        merge_sort(losowa, n);
+        merge_sort(temp, n);
         clock_t end = clock();
         merge_time = double(end - begin) / CLOCKS_PER_SEC;
         wyj<<"pomiar dla "<<n<<" elementow: "<<merge_time<<"s"<<endl;
@@ -473,17 +461,15 @@ int main()
     wyj<<"4) heap-sort: "<<endl;
     for(short i=0; i<15; i++)
     {
-        losujStale(losowa, n);
+        resetuj_tablice(losowa, temp, n);
         clock_t begin = clock();
-        heap_sort(losowa, n);
+        heap_sort(temp, n);
         clock_t end = clock();
         heap_time = double(end - begin) / CLOCKS_PER_SEC;
         wyj<<"pomiar dla "<<n<<" elementow: "<<heap_time<<"s"<<endl;
         n += A;
     }
 
-    n = A;
-
-
+    wyjscie.close();        //ZAMKNIECIE PLIKU Z WYNIKAMI
     return 0;
 }
