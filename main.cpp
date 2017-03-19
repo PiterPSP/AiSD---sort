@@ -103,10 +103,32 @@ void heap_sort(unsigned int data[], unsigned int n)
 
 }
 
-void merge_sort(unsigned int data[], unsigned int n)
+
+void merge_sort(int *tab, int pocz, int size, int *b)
 {
-	//todo
+	int sr = ((pocz + size) / 2) - 1;
+	if ((sr - pocz) > 0) merge_sort(tab, pocz, sr + 1, b);
+	if ((size - sr) > 2) merge_sort(tab, sr + 1, size, b);
+	int i = pocz;
+	int j = sr + 1;
+	for (int k = pocz; k < size; k++)
+	{
+		if (((i <= sr) && (j >= size)) || (((i <= sr) && (j < size)) && (tab[i] <= tab[j])))
+		{
+			b[k] = tab[i];
+			i = i + 1;
+		}
+		else
+		{
+			b[k] = tab[j];
+			j = j + 1;
+		}
+	}
+	for (int k = pocz; k < size; k++)
+		tab[k] = b[k];
+
 }
+
 
 void insert_sort(unsigned int data[], unsigned int n)
 {
