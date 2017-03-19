@@ -5,6 +5,7 @@
 #include <iostream>
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>
+#include <time.h>
 
 using namespace std;
 
@@ -47,7 +48,18 @@ void wypisz( int data[],  int n)
 
 int podziel(int tablica[], int p, int r) 
 {
-	int x = tablica[p]; 
+	// prawy wybor 
+	//int x = tablica[r-1]; 
+
+	// lewy wybor 
+	// int x = tablica[p]; 
+
+	//srodkowy wybor 
+	//int x= tablica[(p+r)/2];
+
+	// losowy wybor 
+	//int  los = rand() % r;
+	//int x = tablica[los];
 	int i = p, j = r, w; 
 	
 	while (true) 
@@ -75,8 +87,6 @@ void quicksort(int tablica[], int p, int r)
 	if (p < r)
 	{
 		q = podziel(tablica, p, r); 
-		wypisz(tablica,MAX);
-		cout << " -------------- " << q << endl;
 		quicksort(tablica, p, q);
 		quicksort(tablica, q + 1, r); 
 	}
@@ -84,10 +94,13 @@ void quicksort(int tablica[], int p, int r)
 
 int main()
 {
+	srand(time(NULL));
 	int tab[MAX];
 	losuj(tab, MAX);
+	wypisz(tab, MAX);
 	quicksort(tab, 0, MAX - 1); // wywolanie funkcji sortujacej
 
+	cout << endl;
 
 	wypisz(tab, MAX);
 
