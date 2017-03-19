@@ -5,13 +5,13 @@
 #include <iostream>
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>
-#include "stdafx.h"
+//#include "stdafx.h"
 
 const short A = 10000; // poczatkowa liczba elem do losowania, pozniej zwiekszana w petli o krok = A (A + A itd.)
 const unsigned int MAX = 150000; // max liczba elemntow (w ostatnim kroku nr 15)
 
 using namespace std;
-
+/*
 short max_indeks(short data[], unsigned int n)
 {
 	int maxi = 0;
@@ -23,7 +23,7 @@ short max_indeks(short data[], unsigned int n)
 		}
 	}
 	return maxi;
-}
+}*/
 
 void losuj(unsigned int tab[], unsigned int n)
 {
@@ -93,16 +93,50 @@ bool if_sorted(unsigned int data[], unsigned int n)
 	return 1;
 }
 
-void quick_sort(unsigned int data[], unsigned int n)
+bool if_sorted_heap(unsigned int data[], unsigned int n)
 {
+	for (unsigned int i = 1; i < n; i++)
+	{
+		if (data[i] > data[i + 1])
+			return 0;
+	}
+	return 1;
+}
 
+void heapify(unsigned int data[], unsigned int hsize, unsigned int i)
+{
+    unsigned int largest, l = 2*i, r = (2*i)+1;
+    if(l <= hsize && data[l] > data[i])
+        largest = l;
+    else
+        largest = i;
+    if(r <= hsize && data[r] > data[largest])
+        largest = r;
+    if(largest != i)
+    {
+        swap(data[largest], data[i]);
+        heapify(data, hsize, largest);
+    }
+}
+
+void build_heap(unsigned int data[], unsigned int hsize)
+{
+    for(unsigned int i = hsize / 2; i > 0; i--)
+    {
+        heapify(data, hsize, i);
+    }
 }
 
 void heap_sort(unsigned int data[], unsigned int n)
 {
-
+    build_heap(data, n);
+    for(unsigned int i = n; i > 1; i--)
+    {
+        swap(data[i], data[1]);
+        n--;
+        heapify(data, n, 1);
+    }
 }
-
 
 void merge_sort(int *tab, int pocz, int size, int *b)
 {
@@ -126,9 +160,7 @@ void merge_sort(int *tab, int pocz, int size, int *b)
 	}
 	for (int k = pocz; k < size; k++)
 		tab[k] = b[k];
-
 }
-
 
 void insert_sort(unsigned int data[], unsigned int n)
 {
@@ -150,7 +182,7 @@ void selection_sort(unsigned int data[], unsigned int n)
 	for (unsigned int i = n - 1; i >= 1; i--)
 	{
 		unsigned int maxi = i;
-		for (unsigned int j = i - 1; j >= 0; j--)
+		for (int j = i - 1; j >= 0; j--)
 		{
 			if (data[j] > data[maxi])
 			{
@@ -169,18 +201,26 @@ void resetuj_tablice(unsigned int glowna[], unsigned int temp[], unsigned int n)
 	}
 }
 
+void przesun_tablice(unsigned int data[], unsigned int n)
+{
+    for (unsigned int i = n; i > 0; i--)
+	{
+		data[i] = data[i-1];
+	}
+}
+
 int main()
 {
 	srand(time(NULL));
 
-	unsigned int losowa[MAX], temp[MAX];   // ZOSTAWILEM NAZWE "LOSOWA" BO NIE CHCIALO MI SIE WSZEDZIE ZMIENIAC, TO POPROSTU TABLICA GLOWNA :P
-
+	unsigned int losowa[MAX + 1], temp[MAX + 1];   // ZOSTAWILEM NAZWE "LOSOWA" BO NIE CHCIALO MI SIE WSZEDZIE ZMIENIAC, TO POPROSTU TABLICA GLOWNA :P
+                    // MAX + 1 bo do heap trzeba iteracji od 1 do MAX, wiec tworze zapas miejsca do przesuniecia
 	double selection_time = 0, insert_time = 0, merge_time = 0, heap_time = 0, quick_time = 0;
 
 	unsigned int n = A;   //   n - liczba elem do losowania
 
-	ofstream wyjscie;   // TWORZENIE STRUMIENIA WYJSCIA PLIKU
-	wyjscie.open("wyniki.txt");     // OTWIERANIE (TWORZENIE) PLIKU SDO WYPISANIA WYNIKOW
+	ofstream wyj;   // TWORZENIE STRUMIENIA WYJSCIA PLIKU
+	wyj.open("wyniki.txt");     // OTWIERANIE (TWORZENIE) PLIKU SDO WYPISANIA WYNIKOW
 	wyj << "Wyniki pomiarow czasu wykonywania algorytmow sortowania:" << endl << endl << endl << "Czas sortowania dla:" << endl << endl;
 
 	//LOSOWO
@@ -234,7 +274,8 @@ int main()
 	wyj << "4) heap-sort: " << endl;
 	for (short i = 0; i<15; i++)
 	{
-		resetuj_tablice(losowa, temp, n);
+		resetuj_tablice(losowa, temp, n);       // indeksy od 0 do n-1
+		przesun_tablice(temp, n);     //przesuniecie elementow by byly indeksowane od 1 do n)
 		clock_t begin = clock();
 		heap_sort(temp, n);
 		clock_t end = clock();
@@ -249,7 +290,7 @@ int main()
 
 	wyj << endl << "b) rosnacego zestawu danych:" << endl << endl;
 
-	losujRosnac(losowa, n);
+	losujRosnac(losowa, MAX);
 
 	wyj << "1) insert-sort: " << endl;
 	for (short i = 0; i<15; i++)
@@ -297,6 +338,7 @@ int main()
 	for (short i = 0; i<15; i++)
 	{
 		resetuj_tablice(losowa, temp, n);
+		przesun_tablice(temp, n);
 		clock_t begin = clock();
 		heap_sort(temp, n);
 		clock_t end = clock();
@@ -311,7 +353,7 @@ int main()
 
 	wyj << endl << "c) malejacego zestawu danych:" << endl << endl;
 
-	losujMalejac(losowa, n);
+	losujMalejac(losowa, MAX);
 
 	wyj << "1) insert-sort: " << endl;
 	for (short i = 0; i<15; i++)
@@ -359,6 +401,7 @@ int main()
 	for (short i = 0; i<15; i++)
 	{
 		resetuj_tablice(losowa, temp, n);
+		przesun_tablice(temp, n);
 		clock_t begin = clock();
 		heap_sort(temp, n);
 		clock_t end = clock();
@@ -373,7 +416,7 @@ int main()
 
 	wyj << endl << "d) v-ksztaltnego zestawu danych:" << endl << endl;
 
-	losujV(losowa, n);
+	losujV(losowa, MAX);
 
 	wyj << "1) insert-sort: " << endl;
 	for (short i = 0; i<15; i++)
@@ -421,6 +464,7 @@ int main()
 	for (short i = 0; i<15; i++)
 	{
 		resetuj_tablice(losowa, temp, n);
+		przesun_tablice(temp, n);
 		clock_t begin = clock();
 		heap_sort(temp, n);
 		clock_t end = clock();
@@ -435,7 +479,7 @@ int main()
 
 	wyj << endl << "e) stalego zestawu danych:" << endl << endl;
 
-	losujStale(losowa, n);
+	losujStale(losowa, MAX);
 
 	wyj << "1) insert-sort: " << endl;
 	for (short i = 0; i<15; i++)
@@ -483,6 +527,7 @@ int main()
 	for (short i = 0; i<15; i++)
 	{
 		resetuj_tablice(losowa, temp, n);
+		przesun_tablice(temp, n);
 		clock_t begin = clock();
 		heap_sort(temp, n);
 		clock_t end = clock();
@@ -491,6 +536,6 @@ int main()
 		n += A;
 	}
 
-	wyjscie.close();        //ZAMKNIECIE PLIKU Z WYNIKAMI
+	wyj.close();        //ZAMKNIECIE PLIKU Z WYNIKAMI
 	return 0;
 }
