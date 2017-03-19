@@ -1,0 +1,96 @@
+#include <cstdlib>
+#include <fstream>  // OBSLUGA STRUMIENIA WEJ/WYJ PLIKOW
+#include <ctime>
+#include <limits.h>
+#include <iostream>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>
+
+using namespace std;
+
+const int MAX = 10;
+#pragma region Losowania
+
+void losuj( int tab[],  int n)
+{
+	for (unsigned int i = 0; i < n; i++)
+	{
+		//ULONG_MAX
+		tab[i] = rand() % 25 + 1;
+	}
+}
+void losujA( int tab[],  int n)
+{
+	tab[0] = 1;
+	unsigned int i = 0;
+	for (i; i < (n/2); i++)
+	{
+		tab[i] = tab[i - 1] + 1;
+	}
+	for (i; i < n; i++)
+	{
+
+		tab[i] = tab[i - 1] - 1;
+	}
+	
+}
+void wypisz( int data[],  int n)
+{
+	for (unsigned int i = 0; i<n; i++)
+	{
+		cout << data[i] << ", ";
+	}
+}
+
+#pragma endregion
+
+
+int podziel(int tablica[], int p, int r) 
+{
+	int x = tablica[p]; 
+	int i = p, j = r, w; 
+	
+	while (true) 
+	{
+		while (tablica[j] > x) 
+			j--;
+		while (tablica[i] < x) 
+			i++;
+		if (i < j) 
+		{
+			w = tablica[i];
+			tablica[i] = tablica[j];
+			tablica[j] = w;
+			i++;
+			j--;
+		}
+		else 
+			return j;
+	}
+}
+
+void quicksort(int tablica[], int p, int r) 
+{
+	int q;
+	if (p < r)
+	{
+		q = podziel(tablica, p, r); 
+		wypisz(tablica,MAX);
+		cout << " -------------- " << q << endl;
+		quicksort(tablica, p, q);
+		quicksort(tablica, q + 1, r); 
+	}
+}
+
+int main()
+{
+	int tab[MAX];
+	losuj(tab, MAX);
+	quicksort(tab, 0, MAX - 1); // wywolanie funkcji sortujacej
+
+
+	wypisz(tab, MAX);
+
+
+	return 0;
+}
